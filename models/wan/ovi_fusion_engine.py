@@ -70,6 +70,7 @@ class OviFusionEngine:
         self.device = device
         self.target_dtype = torch.bfloat16 # dtype, wont work with torch.float16
         model, video_config, audio_config = init_fusion_score_model_ovi()
+        # offload.load_model_data(model, "c:/temp/model_960x960.safetensors")
         offload.load_model_data(model.video_model, model_filename[0])
         offload.load_model_data(model.audio_model, model_filename[1])
         offload.change_dtype(model, dtype, True)
@@ -78,11 +79,11 @@ class OviFusionEngine:
         self.model = model
 
 
-        # offload.save_model(model.video_model, "wan2.2_ovi_video_10B_bf16.safetensors")
-        # offload.save_model(model.video_model, "wan2.2_ovi_video_10B_quanto_fp16_int8.safetensors", do_quantize=True)
+        # offload.save_model(model.video_model, "wan2.2_ovi1_1_video_10B_bf16.safetensors")
+        # offload.save_model(model.video_model, "wan2.2_ovi1_1_video_10B_quanto_bf16_int8.safetensors", do_quantize=True)
 
-        # offload.save_model(model.audio_model, "wan2.2_ovi_audio_10B_bf16.safetensors")
-        # offload.save_model(model.audio_model, "wan2.2_ovi_audio_10B_quanto_fp16_int8.safetensors", do_quantize=True)
+        # offload.save_model(model.audio_model, "wan2.2_ovi1_1_audio_10B_bf16.safetensors")
+        # offload.save_model(model.audio_model, "wan2.2_ovi1_1_audio_10B_quanto_bf16_int8.safetensors", do_quantize=True)
 
 
         self.vae_stride = (4, 16, 16)
@@ -95,12 +96,17 @@ class OviFusionEngine:
         vae_model_audio.requires_grad_(False).eval()
         self.audio_vae = vae_model_audio.bfloat16()
         # Load T5 text model
+        text_encoder_folder = model_def.get("text_encoder_folder")
+        if text_encoder_folder:
+            tokenizer_path = fl.locate_folder(text_encoder_folder)
+        else:
+            tokenizer_path = os.path.dirname(text_encoder_filename)
         self.text_encoder = T5EncoderModel(
             text_len=512,
             dtype=torch.bfloat16,
             device=torch.device('cpu'),
             checkpoint_path=text_encoder_filename,
-            tokenizer_path=fl.locate_folder("umt5-xxl"),
+            tokenizer_path=tokenizer_path,
             shard_fn= None)
         
 
@@ -122,14 +128,14 @@ class OviFusionEngine:
         logging.info(f"OVI Fusion Engine initialized, GPU VRAM allocated: {torch.cuda.memory_allocated(device)/1e9:.2f} GB, reserved: {torch.cuda.memory_reserved(device)/1e9:.2f} GB")
 
 
-
-    @torch.inference_mode()
+    @torch.no_grad()
     def generate(self,
                     input_prompt, 
                     image_start=None,
                     input_video = None,
                     width = 1280,
                     height = 720,
+                    frame_num = 121,
                     seed=100,
                     solver_name="unipc",
                     sampling_steps=50,
@@ -209,9 +215,13 @@ class OviFusionEngine:
             video_h, video_w = video_frame_height_width
             video_latent_h, video_latent_w = video_h // 16, video_w // 16
 
-        video_latent_length = 31
-        audio_latent_length = 157
-    
+        if frame_num == 121:
+            video_latent_length = 31
+            audio_latent_length = 157
+        else:
+            video_latent_length = 61
+            audio_latent_length = 314
+
 
 		
         from .modules.posemb_layers import get_rotary_pos_embed, get_nd_rotary_pos_embed

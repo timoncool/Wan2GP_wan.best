@@ -27,7 +27,6 @@ class VideoMaskCreatorPlugin(WAN2GPPlugin):
             tab_id="video_mask_creator",
             label="Video Mask Creator",
             component_constructor=self.create_mask_creator_ui,
-            position=1
         )
 
     def create_mask_creator_ui(self):
@@ -40,6 +39,7 @@ class VideoMaskCreatorPlugin(WAN2GPPlugin):
             server_config=self.server_config,
             get_current_model_settings_fn=self.get_current_model_settings
         )
+        self.matanyone_app.PlugIn = self
 
     def on_tab_select(self, state: dict) -> None:
         # print("[VideoMaskCreatorPlugin] Tab selected. Loading models...")

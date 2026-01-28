@@ -5,150 +5,23 @@
 <b>WanGP by DeepBeepMeep : The best Open Source Video Generative Models Accessible to the GPU Poor</b>
 </p>
 
-WanGP supports the Wan (and derived models), Hunyuan Video and LTV Video models with:
+WanGP supports the Wan (and derived models), Hunyuan Video, Flux, Qwen, Z-Image, LongCat, Kandinsky and LTX Video models with:
 - Low VRAM requirements (as low as 6 GB of VRAM is sufficient for certain models)
 - Support for old Nvidia GPUs (RTX 10XX, 20xx, ...)
 - Support for AMD GPUs Radeon RX 76XX, 77XX, 78XX & 79XX, instructions in the Installation Section Below.
 - Very Fast on the latest GPUs
 - Easy to use Full Web based interface
+- Support for many checkpoint Quantized formats: int8, fp8, gguf, NV FP4, Nunchaku
 - Auto download of the required model adapted to your specific architecture
-- Tools integrated to facilitate Video Generation : Mask Editor, Prompt Enhancer, Temporal and Spatial Generation, MMAudio, Video Browser, Pose / Depth / Flow extractor
+- Tools integrated to facilitate Video Generation : Mask Editor, Prompt Enhancer, Temporal and Spatial Generation, MMAudio, Video Browser, Pose / Depth / Flow extractor, Motion Designer
+- Plenty of ready to use Plug Ins: Gallery Browser, Upscaler, Models/Checkpoints Manager, CivitAI browser and downloader, ...
 - Loras Support to customize each model
 - Queuing system : make your shopping list of videos to generate and come back later
+- Headless mode: launch the generation of multiple image / videos using a command line
 
 **Discord Server to get Help from Other Users and show your Best Videos:** https://discord.gg/g7efUW9jGV
 
 **Follow DeepBeepMeep on Twitter/X to get the Latest News**: https://x.com/deepbeepmeep
-
------
-
-### You have your choice of Dark or Light Theme
-
-
-<img width="1895" height="1023" alt="Screenshot 2025-10-23 210313" src="https://github.com/user-attachments/assets/3778ae4e-6a95-4752-ba47-bb160c653310" />
-
------
-<img width="1899" height="1020" alt="Screenshot 2025-10-23 210500" src="https://github.com/user-attachments/assets/5e524260-ad24-4203-acf2-6622676a83bb" />
-
------
-![Screen Recording 2025-10-23 210625 - frame at 0m9s](https://github.com/user-attachments/assets/c65a815e-09fa-41a7-bc49-5f879b0b8ece)
-
------
-
-## 🔥 Latest Updates : 
-### November 1 2025: WanGP v9.3, How many bananas is too many bananas ?
-
-**Chrono Edit**: a new original way to edit an Image. This one will generate a Video will that performs the full edition work and return the last Image. It can be hit or a miss but when it works it is quite impressive. Please note you must absolutely use the *Prompt Enhancer* on your *Prompt Instruction* because this model expects a very specific format. The Prompt Enhancer for this model has a specific System Prompt to generate the right Chrono Edit Prompt.
-
-**LyCoris** support: preliminary basic Lycoris support for this Lora format. At least Qwen Multi Camera should work (https://huggingface.co/dx8152/Qwen-Edit-2509-Multiple-angles). If you have a Lycoris that does not work and it may be interesting please mention it in the Request Channel
-
-### October 29 2025: WanGP v9.21, Why isn't all my VRAM used ?
-
-
-*WanGP exclusive*:  VRAM requirements have never been that low !
-
-**Wan 2.2 Ovi 10 GB** for all the GPU Poors of the World: *only 6 GB of VRAM to generate 121 frames at 720p*. With 16 GB of VRAM, you may even be able to load all the model in VRAM with *Memory Profile 3*
-
-To get the x10 speed effect just apply the FastWan Lora Accelerator that comes prepackaged with Ovi (acccessible in the  dropdown box Settings at the top)
-
-After thorough testing it appears that *Pytorch 2.8* is causing RAM memory leaks when switching models as it won't release all the RAM. I could not find any workaround. So the default Pytorch version to use with WanGP is back to *Pytorch 2.7*
-Unless you want absolutely to use Pytorch compilation which is not stable with Pytorch 2.7 with RTX 50xx , it is recommended to switch back to Pytorch 2.7.1 (tradeoff between 2.8 and 2.7):
-```bash
-cd Wan2GP
-conda activate wan2gp
-pip install torch==2.7.1 torchvision torchaudio --index-url https://download.pytorch.org/whl/test/cu128
-```
-You will need to reinstall SageAttention FlashAttnetion, ...
-
-*update v9.21*: Got FastWan to work with Ovi: it is now 10 times faster ! (not including the VAE)
-*update v9.25*: added Chroma Radiance october edition + reverted to pytorch 2.7
-
-### October 24 2025: WanGP v9.10, What else will you ever need after this one ?
-
-With WanGP v9 you will have enough features to go to a desert island with no internet connection and comes back with a full Hollywood movie.
-
-First here are the new models supported:
-- **Wan 2.1 Alpha** : a very requested model that can generate videos with *semi transparent background* (as it is very lora picky it supports only the *Self Forcing / lightning* loras accelerators)
-- **Chatterbox Multilingual**: the first *Voice Generator* in WanGP. Let's say you have a flu and lost your voice (somehow I can't think of another usecase), the world will still be able to hear you as *Chatterbox* can generate up to 15s clips of your voice using a recorded voice sample. Chatterbox works with numerous languages out the box.
-- **Flux DreamOmni2** : another wannabe *Nano Banana* image Editor / image composer. The *Edit Mode* ("Conditional Image is first Main Subject ...") seems to work better than the *Gen Mode* (Conditional Images are People / Objects ..."). If you have at least 16 GB of VRAM it is recommended to force profile 3 for this model (it uses an autoregressive model for the prompt encoding and the start may be slow).
-- **Ditto** (new with *WanGP 9.1* !): a powerful Video 2 Video model, can change for instance the style or the material visible in the video. Be aware it is an instruct based model, so the prompt should contain intructions. 
-
-Upgraded Features:
-- A new **Audio Gallery** to store your Chatterbox generations and import your audio assets. *Metadata support* (stored gen settings) for *Wav files* generated with WanGP available from day one. 
-- **Matanyone** improvements: you can now use it during a video gen, it will *suspend gracefully the Gen in progress*. *Input Video / Images* can be resized for faster processing & lower VRAM. Image version can now generate *Green screens* (not used by WanGP but I did it because someone asked for it and I am nice) and *Alpha masks*.
-- **Images Stored in Metadata**: Video Gen *Settings Metadata* that are stored in the Generated Videos can now contain the Start Image, Image Refs used to generate the Video. Many thanks to **Gunther-Schulz** for this contribution
-- **Three Levels of Hierarchy** to browse the models / finetunes: you can collect as many finetunes as you want now and they will no longer encumber the UI.
-- Added **Loras Accelerators** for *Wan 2.1 1.3B*, *Wan 2.2 i2v*, *Flux* and the latest *Wan 2.2 Lightning*
-- Finetunes now support **Custom Text Encoders** : you will need to use the "text_encoder_URLs" key. Please check the finetunes doc. 
-- Sometime Less is More: removed the palingenesis finetunes that were controversial
-
-Huge Kudos & Thanks to **Tophness** that has outdone himself with these Great Features:
-- **Multicolors Queue** items with **Drag & Drop** to reorder them
-- **Edit a Gen Request** that is already in the queue
-- Added **Plugin support** to WanGP : found that features are missing in WanGP, you can now add tabs at the top in WanGP. Each tab may contain a full embedded App that can share data with the Video Generator of WanGP. Please check the Plugin guide written by Tophness and don't hesitate to contact him or me on the Discord if you have a plugin you want to share. I have added a new Plugins channels to discuss idea of plugins and help each other developing plugins. *Idea for a PlugIn that may end up popular*: a screen where you view the hard drive space used per model and that will let you remove unused models weights
-- Two Plugins ready to use designed & developped by **Tophness**: an **Extended Gallery** and a **Lora multipliers Wizard**
-
-WanGP v9 is now targetting Pytorch 2.8 although it should still work with 2.7, don't forget to upgrade by doing:
-```bash
-pip install torch==2.8.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/test/cu128
-```
-You will need to upgrade Sage Attention or Flash (check the installation guide)
-
-*Update info: you might have some git error message while upgrading to v9 if WanGP is already installed.*
-Sorry about that if that's the case, you will need to reinstall WanGP.
-There are two different ways to fix this issue while still preserving your data:
-1) **Command Line**
-If you have access to a terminal window :
-```
-cd installation_path_of_wangp
-git fetch origin && git reset --hard origin/main
-pip install -r requirements.txt
-```
-
-2) **Generic Method**
-a) move outside the installation WanGP folder the folders **ckpts**, **settings**, **outputs** and all the **loras** folders and the file **wgp_config.json**
-b) delete the WanGP folder and reinstall
-c) move back what you moved in a)
-
-## 🔥 Latest Updates : 
-### October 6 2025: WanGP v8.999 - A few last things before the Big Unknown ...
-
-This new version hasn't any new model...
-
-...but temptation to upgrade will be high as it contains a few Loras related features that may change your Life:
-- **Ready to use Loras Accelerators Profiles** per type of model that you can apply on your current *Generation Settings*. Next time I will recommend a *Lora Accelerator*, it will be only one click away. And best of all of the required Loras will be downloaded automatically. When you apply an *Accelerator Profile*, input fields like the *Number of Denoising Steps* *Activated Loras*, *Loras Multipliers* (such as "1;0 0;1" ...) will be automatically filled. However your video specific fields will be preserved, so it will be easy to switch between Profiles to experiment. With *WanGP 8.993*, the *Accelerator Loras* are now merged with *Non Accelerator Loras". Things are getting too easy...
-
-- **Embedded Loras URL** : WanGP will now try to remember every Lora URLs it sees. For instance if someone sends you some settings that contain Loras URLs or you extract the Settings of Video generated by a friend with Loras URLs, these URLs will be automatically added to *WanGP URL Cache*. Conversely everything you will share (Videos, Settings, Lset files) will contain the download URLs if they are known. You can also download directly a Lora in WanGP by using the *Download Lora* button a the bottom. The Lora will be immediatly available and added to WanGP lora URL cache. This will work with *Hugging Face* as a repository. Support for CivitAi will come as soon as someone will nice enough to post a GitHub PR ...
-
-- **.lset file** supports embedded Loras URLs. It has never been easier to share a Lora with a friend. As a reminder a .lset file can be created directly from *WanGP Web Interface* and it contains a list of Loras and their multipliers, a Prompt and Instructions how to use these loras (like the Lora's *Trigger*). So with embedded Loras URL, you can send an .lset file by email or share it on discord: it is just a 1 KB tiny text, but with it other people will be able to use Gigabytes Loras as these will be automatically downloaded. 
-
-I have created the new Discord Channel **share-your-settings** where you can post your *Settings* or *Lset files*. I will be pleased to add new Loras Accelerators in the list of WanGP *Accelerators Profiles if you post some good ones there. 
-
-*With the 8.993 update*, I have added support for **Scaled FP8 format**. As a sample case, I have created finetunes for the **Wan 2.2 PalinGenesis** Finetune which is quite popular recently. You will find it in 3 flavors : *t2v*, *i2v* and *Lightning Accelerated for t2v*.
-
-The *Scaled FP8 format* is widely used as it the format used by ... *ComfyUI*. So I except a flood of Finetunes in the *share-your-finetune* channel. If not it means this feature was useless and I will remove it &#x1F608;&#x1F608;&#x1F608;
-
-Not enough Space left on your SSD to download more models ? Would like to reuse Scaled FP8 files in your ComfyUI Folder without duplicating them ? Here comes *WanGP 8.994* **Multiple Checkpoints Folders** : you just need to move the files into different folders / hard drives or reuse existing folders and let know WanGP about it in the *Config Tab* and WanGP will be able to put all the parts together.   
-
-Last but not least the Lora's documentation has been updated.
-
-*update 8.991*: full power of *Vace Lynx* unleashed with new combinations such as Landscape + Face / Clothes + Face  / Injectd Frame (Start/End frames/...) + Face
-*update 8.992*: optimized gen with Lora, should be 10% faster if many loras
-*update 8.993*: Support for *Scaled FP8* format and samples *Paligenesis* finetunes, merged Loras Accelerators and Non Accelerators
-*update 8.994*: Added custom checkpoints folders
-*update 8.999*: fixed a lora + fp8 bug and version sync for the jump to the unknown 
-
-### September 30 2025: WanGP v8.9 - Combinatorics
-
-This new version of WanGP introduces **Wan 2.1 Lynx** the best Control Net so far to transfer *Facial Identity*. You will be amazed to recognize your friends even with a completely different hair style. Congrats to the *Byte Dance team* for this achievement. Lynx works quite with well *Fusionix t2v* 10 steps.
-
-*WanGP 8.9* also illustrate how existing WanGP features can be easily combined with new models. For instance with *Lynx* you will get out of the box *Video to Video* and *Image/Text to Image*.
-
-Another fun combination is *Vace* + *Lynx*, which works much better than *Vace StandIn*. I have added sliders to change the weight of Vace & Lynx to allow you to tune the effects.
-
-
-
-See full changelog: **[Changelog](docs/CHANGELOG.md)**
 
 ## 📋 Table of Contents
 
@@ -158,11 +31,140 @@ See full changelog: **[Changelog](docs/CHANGELOG.md)**
 - [📚 Documentation](#-documentation)
 - [🔗 Related Projects](#-related-projects)
 
+
+## 🔥 Latest Updates : 
+
+### January 27th 2026: WanGP v10.54, Music for your Hearts
+
+WanGP Special *TTS* (Text To Speech) Release:
+
+- **Heart Mula**: *Suno* quality song with lyrics on your local PC. You can generate up to 4 min of music.
+
+- **Qwen 3 TTS**: you can either do *Voice Cloning*, *Generate a Custom Voice based on a Prompt* or use a *Predefined Voice*
+
+- **TTS Features**:
+   - **Early stop** : you can abort a gen, while still keeping what has been generated (will work only for TTS models which are *Autoregressive Models*, no need to ask that for Image/Video gens which are *Diffusion Models*)
+   - **Specialized Prompt Enhancers**: if you enter the prompt in Heart Mula *"a song about AI generation"*, *WanGP Prompt Enhancer* will generate the corresponding masterpiece for you. Likewise you can enhance "A speech about AI generation" when using Qwen3 TTS or ChatterBox.
+   - **Custom Output folder for Audio Gens**: you can now choose a different folder for the *Audio Outputs*
+   - **Default Memory Profile for Audio Models**: TTS models can get very slow if you use profile 4 (being autoregressive models, they will need to load all the layers one per one to generate one single audio token then rinse & repeat). On the other hand, they dont't need as much VRAM, so you can now define a more agressive profile (3+ for instance)
+
+- **Z Image Base**: try it if you are into the *Z Image* hype but it will be probably useless for you unless you are a researcher and / or want to build a finetune out of it. This model requires from 35 to 50 steps (4x to 6x slower than *Z Image turbo*) and cfg > 1 (an additional 2x slower) and there is no *Reinforcement Learning* so Output Images wont be as good. The plus side is a higher diversity and *Native Negative Prompt* (versus Z Image virtual Negative Prompt using *NAG*) 
+
+- **Various Improvements**:
+   - Video /Audio Galleries now support deletions of gens done outside WanGP
+   - added *MP3 support* for audio outputs
+   - *Check for Updates* button for *Plugins* to see in a glance if any of your plugin can be updated
+   - *Prompt Enhancer* generates a different enhanced prompt each timee you click on it. You can define in the config tab its gen parameters (top k, temperature)
+   - New *Root Loras* folder can be defined in the config Tab. Useful if you have multiple WanGP instances or want to store easily all your loras in a different hard drive 
+
+*update 10.51*: new Heart Mula Finetune better at following instructions, Extra settings (cfg, top k) for TTS models, Rife v4\
+*update 10.52*: updated plugin list and added version tracking\
+*update 10.53*: video/audio galleries now support deletions\
+*update 10.54*: added Z Image Omnibase, prompt enhancers improvements, configurable loras root folder
+
+### January 20th 2026: WanGP v10.43, The Cost Saver
+*GPUs are expensive, RAM is expensive, SSD are expensive, sadly we live now in a GPU & RAM poor.*
+
+WanGP comes again to the rescue:
+
+- **GGUF support**: as some of you know, I am not a big fan of this format because when used with image / video generative models we don't get any speed boost (matrices multiplications are still done at 16 bits), VRAM savings are small and quality is worse than with int8/fp8. Still gguf has one advantage: it consumes less RAM and harddrive space. So enjoy gguf support. I have added ready to use *Kijai gguf finetunes* for *LTX 2*.
+
+- **Models Manager PlugIn**: use this *Plugin* to identify how much space is taken by each *model* / *finetune* and delete the ones you no longer use. Try to avoid deleting shared files otherwise they will be downloaded again.  
+
+- **LTX 2 Dual Video & Audio Control**: you no longer need to extract the audio track of a *Control Video* if you want to use it as well to drive the video generation. New mode will allow you to use both motion and audio from Video Control.
+
+- **LTX 2 - Custom VAE URL**: some users have asked if they could use the old *Distiller VAE* instead of the new one. To do that, create a *finetune* def based on an existing model definition and save it in the *finetunes/* folder with this entry (check the *docs/FINETUNES.md* doc):
+```
+		"VAE_URLs": ["https://huggingface.co/DeepBeepMeep/LTX-2/resolve/main/ltx-2-19b_vae_old.safetensors"]
+```
+
+- **Flux 2 Klein 4B & 9B**: try these distilled models as fast as Z_Image if not faster but with out of the box image edition capabiltities
+
+- **Flux 2 & Qwen Outpainting + Lanpaint**: the inpaint mode of these models support now *outpainting* + more combination possible with *Lanpaint* 
+
+- **RAM Optimizations for multi minutes Videos**: processing, saving, spatial & Temporal upsampling very long videos should require much less RAM. 
+
+- **Text Encoder Cache**: if you are asking a Text prompt already used recently with the current model, it will be taken straight from a cache. The cache is optimized to consume little RAM. It wont work with certain models such as Qwen where the Text Prompt is combined internally with an Image.
+
+*update 10.41*: added Flux 2 klein\
+*update 10.42*: added RAM optimizations & Text Encoder Cache\
+*update 10.43*: added outpainting for Qwen & Flux 2, Lanpaint for Flux 2
+
+### January 15th 2026: WanGP v10.30, The Need for Speed ...
+
+- **LTX Distilled VAE Upgrade**: *Kijai* has observed that the Distilled VAE produces images that were less sharp that the VAE of the Non Distilled model. I have used this as an opportunity to repackage all the LTX 2 checkpoints and reduce their overal HD footprint since they all share around 5GB. 
+
+**So dont be surprised if the old checkpoints are deleted and new are downloaded !!!**.
+
+- **LTX2 Multi Passes Loras multipliers**: *LTX2* supports now loras multiplier that depend on the Pass No. For instance "1;0.5" means 1 will the strength for the first LTX2 pass and 0.5 will be the strength for the second pass.
+
+- **New Profile 3.5**: here is the lost kid of *Profile 3* & *Profile 5*, you got tons of VRAM, but little RAM ? Profile 3.5 will be your new friend as it will no longer use Reserved RAM to accelerate transfers. Use Profile 3.5 only if you can fit entirely a *Diffusion / Transformer* model in VRAM, otherwise the gen may be much slower.
+
+- **NVFP4 Quantization for LTX 2 & Flux 2**: you will now be able to load *NV FP4* model checkpoints in WanGP. On top of *Wan NV4* which was added recently, we now have *LTX 2 (non distilled)* & *Flux 2* support. NV FP4 uses slightly less VRAM and up to 30% less RAM. 
+
+To enjoy fully the NV FP4 checkpoints (**at least 30% faster gens**), you will need a RTX 50xx and to upgrade to *Pytorch 2.9.1 / Cuda 13* with the latest version of *lightx2v kernels* (check *docs/INSTALLATION.md*). To observe the speed gain, you have to make sure the workload is quite high (high res, long video).
+
+
+### January 13th 2026: WanGP v10.24, When there is no VRAM left there is still some VRAM left ...
+
+- **LTX 2 - SUPER VRAM OPTIMIZATIONS**  
+
+*With WanGP 10.21 HD 720p Video Gens of 10s just need now 8GB of VRAM!*
+
+LTX Team said this video gen was for 4k. So I had no choice but to squeeze more VRAM with further optimizations.
+
+After much suffering I have managed to reduce by at least 1/3 the VRAM requirements of LTX 2, which means:
+  - 10s at 720p can be done with only 8GB of VRAM
+  - 10s at 1080p with only 12 GB of VRAM
+  - 20s at 1080p with only 16 GB of VRAM
+  - 10s at Full 4k (3840 x 2176 !!!) with 24 GB of VRAM.  However the bad news is LTX 2 video is not for 4K, as 4K outputs may give you nightmares ...
+
+3K/4K resolutions will be available only if you enable them in the *Config* / *General* tab.
+
+- **Ic Loras support**: Use a *Control Video* to transfer *Pose*, *Depth*, *Canny Edges*. I have added some extra tweaks: with WanGP you can restrict the transfer to a *masked area*, define a *denoising strength* (how much the control video is going to be followed) and a *masking strength* (how much unmasked area is impacted) 
+
+- **Start Image Strength**: This new slider will appear below a *Start Image* or Source *Video*. If you set it to values lower than 1 you may to reduce the static image effect, you get sometime with LTX2 i2v
+ 
+- **Custom Gemma Text Encoder for LTX 2**: As a practical case, the *Heretic* text encoder is now supported by WanGP. Check the *finetune* doc, but in short create a *finetune* that has a *text_encoder_URLS* key that contains a list of one or more file paths or URLs.  
+
+- **Experimental Auto Recovery Failed Lora Pin**: Some users (with usually PC with less than 64 GB of RAM) have reported Out Of Memory although a model seemed to load just fine when starting a gen with Loras. This is sometime related to WanGP attempting (and failing due to unsufficient reserved RAM) to pin the Loras to Reserved Memory for faster gen. I have experimented a recovery mode that should release sufficient ressources to continue the Video Gen. This may solve the oom crashes with *LTX2 Default (non distilled)* 
+
+- **Max Loras Pinned Slider**:  If the Auto Recovery Mode is still not sufficient, I have added a Slider at the bottom of the  *Configuration*  / *Performance* tab that you can use to prevent WanGP from Pinning Loras (to do so set it to 0). As if there is no loading attempt there wont be any crash...
+
+*update 10.21*: added slider Loras Max Pinning slider\
+*update 10.22*: added support for custom Ltx2 Text Encoder + Auto Recovery mode if Lora Pinning failed\
+*update 10.23*: Fixed text prompt ignore in profile 1 & 2 (this created random output videos)
+
+### January 9st 2026: WanGP v10.11, Spoiled again
+
+- **LTX 2**: here is the long awaited *Ovi Challenger*, LTX-2 generates video and an audio soundtrack. As usual this WanGP version is *low VRAM*. You should be able to run it with as low as 10 GB of VRAM. If you have at least 24 GB of VRAM you will be able to generate 20s at 720p in a single window in only 2 minutes with the distilled model.  WanGP LTX 2 version supports on day one, *Start/End keyframes*, *Sliding-Window* / *Video Continuation* and *Generation Preview*. A *LTX 2 distilled* is part of the package for a very fast generation.
+
+With WanGP v10.11 you can now force your soundtrack, it works like *Multitalk* / *Avatar* except in theory it should work with any kind of sound (not just vocals). Thanks to *Kijai* for showing it was possible.
+
+- **Z Image Twin Folder Turbo**: Z Image even faster as this variant can generate images with as little as 1 step (3 steps recommend) 
+
+- **Qwen LanPaint**: very precise *In Painting*, offers a better integration of the inpainted area in the rest of the image. Beware it is up to 5x slower as it "searches" for the best replacement. 
+
+- **Optimized Pytorch Compiler** : *Patience is the Mother of Virtue*. Finally I may (or may not) have fixed the PyTorch compiler with the Wan models. It should work in much diverse situations and takes much less time. 
+
+- **LongCat Video**: experimental support which includes *LongCat Avatar* a talking head model. For the moment it is mostly for models collectors as it is very slow. It needs 40+ steps and each step contains up 3 passes.
+
+- **MMaudio NSFW**: for alternative audio background
+
+*update v10.11*: LTX 2, use your own soundtrack
+
+
+
+
+See full changelog: **[Changelog](docs/CHANGELOG.md)**
+
+
 ## 🚀 Quick Start
 
 **One-click installation:** 
-- Get started instantly with [Pinokio App](https://pinokio.computer/)
-- Use Redtash1 [One Click Install with Sage](https://github.com/Redtash1/Wan2GP-Windows-One-Click-Install-With-Sage)
+Get started instantly with [Pinokio App](https://pinokio.computer/)\
+It is recommended to use in Pinokio the Community Scripts *wan2gp* or *wan2gp-amd* by **Morpheus** rather than the official Pinokio install.
+
 
 **Manual installation:**
 ```bash
@@ -179,6 +181,8 @@ pip install -r requirements.txt
 python wgp.py
 ```
 
+First time using WanGP ? Just check the *Guides* tab, and you will find a selection of recommended models to use.
+
 **Update the application:**
 If using Pinokio use Pinokio to update otherwise:
 Get in the directory where WanGP is installed and:
@@ -194,6 +198,15 @@ git fetch origin && git reset --hard origin/main
 conda activate wan2gp
 pip install -r requirements.txt
 ```
+
+**Run headless (batch processing):**
+
+Process saved queues without launching the web UI:
+```bash
+# Process a saved queue
+python wgp.py --process my_queue.zip
+```
+Create your queue in the web UI, save it with "Save Queue", then process it headless. See [CLI Documentation](docs/CLI.md) for details.
 
 ## 🐳 Docker:
 
